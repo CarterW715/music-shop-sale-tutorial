@@ -1,0 +1,32 @@
+quarkus:
+  http:
+    cors: true
+    port: 8080
+  datasource:
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/postgres
+      driver: org.postgresql.Driver
+    db-kind: postgresql
+    username: postgres
+    password: password01
+  liquibase:
+    migrate-at-start: true
+
+kafka:
+  bootstrap:
+    servers: localhost:29092
+
+mp:
+  messaging:
+    incoming:
+      test-in:
+        topic: test
+        connector: smallrye-kafka
+        value:
+          deserializer: com.practice.musicsalesgood.kafka.serializer.TestMessageSerializer
+    outgoing:
+      test-out:
+        connector: smallrye-kafka
+        topic: test
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
