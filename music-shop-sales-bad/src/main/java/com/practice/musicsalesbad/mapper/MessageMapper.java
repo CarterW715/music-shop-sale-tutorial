@@ -1,5 +1,11 @@
 package com.practice.musicsalesbad.mapper;
 
+import com.practice.musicsalesbad.kafka.model.MusicShopEvent;
+import com.practice.musicsalesbad.repository.model.ShopLesson;
+import com.practice.musicsalesbad.repository.model.ShopReturn;
+import com.practice.musicsalesbad.repository.model.ShopSale;
+import com.practice.musicsalesbad.service.rest.model.RewardsSubmitRequest;
+import com.practice.musicsalesbad.service.rest.model.WarrantySubmitRequest;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.repository.model.ShopLesson;
 import com.practice.musicsalesgood.repository.model.ShopReturn;

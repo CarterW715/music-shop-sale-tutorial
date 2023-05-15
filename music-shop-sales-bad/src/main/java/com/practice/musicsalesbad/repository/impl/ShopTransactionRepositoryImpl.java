@@ -1,9 +1,10 @@
 package com.practice.musicsalesbad.repository.impl;
 
-import com.practice.musicsalesgood.repository.ShopLessonRepository;
-import com.practice.musicsalesgood.repository.ShopSaleRepository;
-import com.practice.musicsalesgood.repository.model.ShopLesson;
-import com.practice.musicsalesgood.repository.model.ShopSale;
+import com.practice.musicsalesbad.repository.ShopTransactionRepository;
+import com.practice.musicsalesbad.repository.model.LessonCancel;
+import com.practice.musicsalesbad.repository.model.ShopLesson;
+import com.practice.musicsalesbad.repository.model.ShopReturn;
+import com.practice.musicsalesbad.repository.model.ShopSale;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Dependent
-public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLessonRepository {
+public class ShopTransactionRepositoryImpl implements ShopTransactionRepository {
 
     @Inject
     EntityManager entityManager;
@@ -51,5 +52,33 @@ public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLe
         return entityManager
                 .createQuery("Select sale from ShopSale sale", ShopSale.class)
                 .getResultList();
+    }
+
+    @Transactional
+    public void saveShopReturn(ShopReturn data) {
+        entityManager.persist(data);
+    }
+
+    public Optional<ShopReturn> getReturnBySaleId(UUID saleId) {
+        var query = entityManager
+                .createQuery("Select return from ShopReturn return where return.shopSale.saleId = :targetId", ShopReturn.class);
+
+        query.setParameter("targetId", saleId);
+
+        return Optional.of(query.getSingleResult());
+    }
+
+    @Transactional
+    public void saveLessonCancel(LessonCancel data) {
+        entityManager.persist(data);
+    }
+
+    public Optional<LessonCancel> getCancelByLessonId(UUID saleId) {
+        var query = entityManager
+                .createQuery("Select return from LessonCancel return where return.shopLesson.lessonId = :targetId", LessonCancel.class);
+
+        query.setParameter("targetId", saleId);
+
+        return Optional.of(query.getSingleResult());
     }
 }
