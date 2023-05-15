@@ -13,11 +13,11 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "shop_return", schema = "good")
-public class ShopReturn {
+@Table(name = "sale_warranty", schema = "good")
+public class SaleWarranty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "shop_return_id")
+    @Column(name = "sale_warranty_id")
     long id;
 
     @JsonIgnore
@@ -25,11 +25,17 @@ public class ShopReturn {
     @JoinColumn(name = "shop_sale_id", referencedColumnName = "shop_sale_id")
     ShopSale shopSale;
 
-    @Column(name = "rfnd_amt")
-    Double refundAmount;
+    @Column(name = "wrnty_strt_dt")
+    LocalDateTime warrantyStart;
 
-    @Column(name = "rtrn_dt")
-    LocalDateTime returnDate;
+    @Column(name = "wrnty_end_dt")
+    LocalDateTime warrantyEnd;
+
+    @Column(name = "wrnty_nm")
+    String warrantName;
+
+    @Column(name = "wrnty_cd")
+    String warrantyCode;
 
     @Column(name = "msg_id")
     UUID messageId;

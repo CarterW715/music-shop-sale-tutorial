@@ -4,6 +4,7 @@ import com.practice.musicsalesgood.audit.model.DbProcessorAuditRecord;
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.kafka.producer.PlaceholderProducer;
+import com.practice.musicsalesgood.kafka.producer.ShopLessonProducer;
 import com.practice.musicsalesgood.mapper.MessageMapper;
 import com.practice.musicsalesgood.repository.ShopLessonRepository;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;
@@ -15,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<PlaceholderProducer, ShopLessonProcessorValidator> {
+public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<ShopLessonProducer, ShopLessonProcessorValidator> {
 
     @Inject
     ShopLessonRepository shopLessonRepositoryImpl;

@@ -2,6 +2,7 @@ package com.practice.musicsalesgood.mapper;
 
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.repository.model.ShopLesson;
+import com.practice.musicsalesgood.repository.model.ShopReturn;
 import com.practice.musicsalesgood.repository.model.ShopSale;
 
 public class MessageMapper {
@@ -56,4 +57,16 @@ public class MessageMapper {
                 .build();
     }
 
+    public static ShopReturn MessageToSaleReturn(MusicShopEvent message, ShopSale sale) {
+        var header = message.getHeader();
+        var returns = message.getReturns();
+        return ShopReturn.builder()
+                .shopSale(sale)
+                .messageId(header.getMessageId())
+                .version(header.getVersion())
+                .eventTimestamp(header.getEventTimestamp())
+                .refundAmount(returns.getRefundAmt())
+                .returnDate(returns.getReturnDate())
+                .build();
+    }
 }

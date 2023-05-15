@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ShopSaleProcessorValidator extends ProcessorValidator {
 
-    ShopSaleRepository shopSaleRepositoryImpl;
+    ShopSaleRepository shopTransactionRepositoryImpl;
 
     @Override
     public void validationLogic(MusicShopEvent event, List<String> errorList) {
@@ -19,7 +19,7 @@ public class ShopSaleProcessorValidator extends ProcessorValidator {
         if (sale.getSaleId() == null) {
             errorList.add("Sale Id is required");
         } else {
-            shopSaleRepositoryImpl
+            shopTransactionRepositoryImpl
                     .getSaleBySaleId(sale.getSaleId())
                     .ifPresent(shopSale -> errorList.add("A sale with this id has already been recorded"));
         }

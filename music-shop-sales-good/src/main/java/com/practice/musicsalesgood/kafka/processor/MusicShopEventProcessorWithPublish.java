@@ -1,15 +1,14 @@
 package com.practice.musicsalesgood.kafka.processor;
 
-import com.practice.musicsalesgood.audit.model.MusicShopEventAuditRecord;
 import com.practice.musicsalesgood.exception.ProcessorValidationException;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.kafka.producer.MusicSaleProducer;
+import com.practice.musicsalesgood.kafka.producer.MusicShopProducer;
 import com.practice.musicsalesgood.validation.processor.ProcessorValidator;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class MusicShopEventProcessorWithPublish<T extends MusicSaleProducer, T2 extends ProcessorValidator> extends MusicShopEventProcessor<T2> {
+public abstract class MusicShopEventProcessorWithPublish<T extends MusicShopProducer, T2 extends ProcessorValidator> extends MusicShopEventProcessor<T2> {
 
     @Inject
     T eventProducer;
