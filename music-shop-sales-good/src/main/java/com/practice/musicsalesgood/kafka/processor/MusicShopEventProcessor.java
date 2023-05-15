@@ -1,6 +1,5 @@
 package com.practice.musicsalesgood.kafka.processor;
 
-import com.practice.musicsalesgood.audit.model.MusicShopEventAuditRecord;
 import com.practice.musicsalesgood.exception.ProcessorValidationException;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.validation.processor.ProcessorValidator;

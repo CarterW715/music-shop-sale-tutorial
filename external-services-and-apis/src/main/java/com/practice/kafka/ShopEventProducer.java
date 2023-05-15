@@ -10,7 +10,7 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 public class ShopEventProducer {
 
     @Inject
-    @Channel("test-out")
+    @Channel("music_sales_stream_local")
     Emitter<MusicShopEvent> testMessageEmitter;
 
     public void publishMusicShopMessage() {

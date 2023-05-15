@@ -1,24 +1,34 @@
 package com.practice.musicsalesgood.kafka.processor;
 
-import com.practice.musicsalesgood.audit.model.DbProcessorAuditRecord;
+import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.kafka.producer.PlaceholderProducer;
 import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.WarrantyMapper;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;
+import com.practice.musicsalesgood.repository.WarrantyRepository;
+import com.practice.musicsalesgood.service.rest.WarrantyServiceRest;
+import com.practice.musicsalesgood.validation.processor.WarrantyProcessorValidator;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-public class WarrantyProcessor extends MusicShopEventProcessorWithPublish<PlaceholderProducer, DbProcessorAuditRecord> {
+public class WarrantyProcessor extends MusicShopEventProcessor<WarrantyProcessorValidator> {
 
     @Inject
-    ShopSaleRepository shopSaleRepositoryImpl;
+    ShopSaleRepository shopTransactionRepositoryImpl;
+
+    @Inject
+    WarrantyRepository warrantyRepositoryImpl;
+
+    @Inject
+    WarrantyServiceRest warrantyServiceRest;
 
     @Override
     public boolean acceptsEventType(String eventType) {
-        return eventType.equals("sold");
+        return eventType.equals(MusicShopEvents.sold.name());
     }
 
     @Override
@@ -27,21 +37,20 @@ public class WarrantyProcessor extends MusicShopEventProcessorWithPublish<Placeh
     }
 
     @Override
-    DbProcessorAuditRecord createAuditRecord(MusicShopEvent event) {
-        return new DbProcessorAuditRecord();
+    WarrantyProcessorValidator getValidator() {
+        return new WarrantyProcessorValidator(shopTransactionRepositoryImpl);
     }
 
-    @Override
-    String getAuditFileName() {
-        return null;
-    }
+    public void processEvent(MusicShopEvent message) {
 
-    public void processEvent(MusicShopEvent message, DbProcessorAuditRecord record) {
-
-        var musicSale = MessageMapper.MessageToShopSale(message);
+        var request = MessageMapper.MessageToWarrantyRequest(message);
 
         try {
-            shopSaleRepositoryImpl.saveShopSale(musicSale);
+            var response = warrantyServiceRest.submitWarranty(request);
+            var warranty = WarrantyMapper.WarrantyResponseToEntity(response.getEntity(), message);
+            warrantyRepositoryImpl.saveWarranty(warranty);
+        } catch (WebApplicationException ex) {
+            log.error("Could not submit warranty successfully", ex);
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }

@@ -1,7 +1,6 @@
 package com.practice.musicsalesgood.repository;
 
 import com.practice.musicsalesgood.repository.model.ShopLesson;
-import com.practice.musicsalesgood.repository.model.ShopSale;
 
 import java.util.Optional;
 import java.util.UUID;

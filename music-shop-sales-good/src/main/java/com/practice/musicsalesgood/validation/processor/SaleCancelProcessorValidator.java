@@ -3,10 +3,8 @@ package com.practice.musicsalesgood.validation.processor;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.repository.SaleReturnRepository;
 import com.practice.musicsalesgood.repository.ShopLessonRepository;
-import com.practice.musicsalesgood.repository.ShopSaleRepository;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

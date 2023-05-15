@@ -3,7 +3,6 @@ package com.practice.musicsalesgood.repository.impl;
 import com.practice.musicsalesgood.repository.LessonCancelRepository;
 import com.practice.musicsalesgood.repository.SaleReturnRepository;
 import com.practice.musicsalesgood.repository.model.LessonCancel;
-import com.practice.musicsalesgood.repository.model.ShopLesson;
 import com.practice.musicsalesgood.repository.model.ShopReturn;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;

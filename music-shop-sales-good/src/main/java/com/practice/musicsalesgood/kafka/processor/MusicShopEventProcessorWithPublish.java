@@ -26,8 +26,6 @@ public abstract class MusicShopEventProcessorWithPublish<T extends MusicShopProd
         }
 
         eventProducer.publishMessage(event);
-
-//        s3AuditListenerServiceImpl.saveUvEventAuditRecord(auditRecord, getAuditFileName());
     }
 
 }

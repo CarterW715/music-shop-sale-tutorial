@@ -2,7 +2,6 @@ package com.practice.musicsalesgood.kafka.processor;
 
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.kafka.producer.PlaceholderProducer;
 import com.practice.musicsalesgood.kafka.producer.ShopSaleProducer;
 import com.practice.musicsalesgood.mapper.MessageMapper;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;

@@ -1,24 +1,24 @@
 package com.practice.musicsalesgood.kafka.processor;
 
-import com.practice.musicsalesgood.audit.model.DbProcessorAuditRecord;
+import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.kafka.producer.PlaceholderProducer;
 import com.practice.musicsalesgood.mapper.MessageMapper;
-import com.practice.musicsalesgood.repository.ShopSaleRepository;
+import com.practice.musicsalesgood.service.rest.RewardsServiceRest;
+import com.practice.musicsalesgood.validation.processor.RewardsProcessorValidator;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-public class RewardsProcessor extends MusicShopEventProcessorWithPublish<PlaceholderProducer, DbProcessorAuditRecord> {
+public class RewardsProcessor extends MusicShopEventProcessor<RewardsProcessorValidator> {
 
     @Inject
-    ShopSaleRepository shopSaleRepositoryImpl;
+    RewardsServiceRest rewardsServiceRest;
 
     @Override
     public boolean acceptsEventType(String eventType) {
-        return eventType.equals("sold");
+        return eventType.equals(MusicShopEvents.sold.name()) || eventType.equals(MusicShopEvents.scheduled.name());
     }
 
     @Override
@@ -27,25 +27,19 @@ public class RewardsProcessor extends MusicShopEventProcessorWithPublish<Placeho
     }
 
     @Override
-    DbProcessorAuditRecord createAuditRecord(MusicShopEvent event) {
-        return new DbProcessorAuditRecord();
+    public RewardsProcessorValidator getValidator() {
+        return new RewardsProcessorValidator();
     }
 
-    @Override
-    String getAuditFileName() {
-        return null;
-    }
+    public void processEvent(MusicShopEvent message) {
 
-    public void processEvent(MusicShopEvent message, DbProcessorAuditRecord record) {
+        var request = MessageMapper.MessageToRewardsRequest(message);
 
-        var musicSale = MessageMapper.MessageToShopSale(message);
-
-        try {
-            shopSaleRepositoryImpl.saveShopSale(musicSale);
-        } catch (Exception ex) {
-            log.error("Something went wrong", ex);
+        try (var resonse = rewardsServiceRest.submitRewards(request)) {
+            if (resonse.getStatus() != 200) {
+                log.error("Something went wrong: {}", resonse.getStatusInfo());
+            }
         }
-
     }
 
 }
