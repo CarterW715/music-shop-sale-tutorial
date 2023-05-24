@@ -1,6 +1,6 @@
 package com.practice.musicsalesbad.repository;
 
-import com.practice.musicsalesgood.repository.model.SaleWarranty;
+import com.practice.musicsalesbad.repository.model.SaleWarranty;
 
 public interface WarrantyRepository {
 

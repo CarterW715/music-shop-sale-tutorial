@@ -1,0 +1,46 @@
+quarkus:
+  http:
+    cors: true
+    port: 8082
+  datasource:
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/postgres
+      driver: org.postgresql.Driver
+    db-kind: postgresql
+    username: postgres
+    password: password01
+  rest-client:
+    external-api:
+      url: http://localhost:8081
+      scope: jakarta.inject.Singleton
+  kafka:
+    devservices:
+      topic-partitions:
+        music_sales_stream_local_bad: 1
+  application:
+    name: music-shop-sales-bad
+  liquibase:
+    database-change-log-lock-table-name: DATABASECHANGELOGBADLOCK
+    database-change-log-table-name: DATABASECHANGELOGBAD
+    migrate-at-start: true
+
+kafka:
+  bootstrap:
+    servers: localhost:29092
+
+mp:
+  messaging:
+    incoming:
+      message-in:
+        topic: music_sales_stream_local_bad
+        connector: smallrye-kafka
+        value:
+          deserializer: com.practice.musicsalesbad.kafka.serializer.MusicShopEventSerializer
+    outgoing:
+      message-out:
+        connector: smallrye-kafka
+        topic: music_sales_stream_local_bad
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+
+external-api/mp-rest/url: http://localhost:8081

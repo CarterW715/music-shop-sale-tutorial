@@ -9,7 +9,17 @@ quarkus:
     db-kind: postgresql
     username: postgres
     password: password01
+  rest-client:
+    external-api:
+      url: http://localhost:8081
+      scope: jakarta.inject.Singleton
+  kafka:
+    devservices:
+      topic-partitions:
+        music_sales_stream_local_good: 1
   liquibase:
+    database-change-log-lock-table-name: DATABASECHANGELOGGOODLOCK
+    database-change-log-table-name: DATABASECHANGELOGGOOD
     migrate-at-start: true
 
 kafka:
@@ -19,15 +29,16 @@ kafka:
 mp:
   messaging:
     incoming:
-      test-in:
-        topic: test
+      message-in:
+        topic: music_sales_stream_local_good
         connector: smallrye-kafka
         value:
-          deserializer: com.practice.musicsalesgood.kafka.serializer.TestMessageSerializer
+          deserializer: com.practice.musicsalesgood.kafka.serializer.MusicShopEventSerializer
     outgoing:
-      test-out:
+      message-out:
         connector: smallrye-kafka
-        topic: test
+        topic: music_sales_stream_local_good
+        merge: true
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
 

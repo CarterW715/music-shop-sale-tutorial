@@ -1,14 +1,24 @@
 package com.practice.musicsalesgood.kafka.producer;
 
+import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
+import java.time.LocalDateTime;
+
 public abstract class MusicShopProducer {
     @Inject
-    @Channel("test-out")
+    @Channel("message-out")
     Emitter<MusicShopEvent> musicShopEventEmitter;
 
-    public abstract void publishMessage(MusicShopEvent message);
+    public void publishErrorEvent(MusicShopEvent event, String error) {
+        event.getHeader().setEventTimestamp(LocalDateTime.now());
+        event.getHeader().setEventType(MusicShopEvents.error.name());
+
+        musicShopEventEmitter.send(event);
+    }
+
+    public abstract void publishEvent(MusicShopEvent event);
 }

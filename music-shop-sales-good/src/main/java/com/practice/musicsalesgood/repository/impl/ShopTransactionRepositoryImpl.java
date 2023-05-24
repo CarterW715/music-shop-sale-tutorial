@@ -4,7 +4,8 @@ import com.practice.musicsalesgood.repository.ShopLessonRepository;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;
 import com.practice.musicsalesgood.repository.model.ShopLesson;
 import com.practice.musicsalesgood.repository.model.ShopSale;
-import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Dependent
+@ApplicationScoped
 public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLessonRepository {
 
     @Inject
@@ -29,13 +30,14 @@ public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLe
         entityManager.persist(data);
     }
 
+    @ActivateRequestContext
     public Optional<ShopSale> getSaleBySaleId(UUID saleId) {
         var query = entityManager
                 .createQuery("Select sale from ShopSale sale where sale.saleId = :targetId", ShopSale.class);
 
         query.setParameter("targetId", saleId);
 
-        return Optional.of(query.getSingleResult());
+        return query.getResultStream().findFirst();
     }
 
     public Optional<ShopLesson> getLessonByLessonId(UUID lessonId) {
@@ -44,7 +46,7 @@ public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLe
 
         query.setParameter("targetId", lessonId);
 
-        return Optional.of(query.getSingleResult());
+        return query.getResultStream().findFirst();
     }
 
     public List<ShopSale> getMusicSales() {

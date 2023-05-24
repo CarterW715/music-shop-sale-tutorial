@@ -51,14 +51,20 @@ create table good.shop_return
     shop_return_id serial primary key,
     shop_sale_id   integer   not null references good.shop_sale,
     rfnd_amt       decimal   not null,
-    rtrn_dt        timestamp not null
+    rtrn_dt        timestamp not null,
+    msg_id           uuid         not null,
+    evnt_ts          timestamp    not null,
+    msg_version      varchar(12)  not null
 );
 
 create table good.lesson_cancel
 (
     shop_return_id serial primary key,
     shop_lesson_id integer not null references good.shop_lesson,
-    rfnd_amt       decimal not null
+    rfnd_amt       decimal not null,
+    msg_id           uuid         not null,
+    evnt_ts          timestamp    not null,
+    msg_version      varchar(12)  not null
 );
 
 create table good.sale_warranty

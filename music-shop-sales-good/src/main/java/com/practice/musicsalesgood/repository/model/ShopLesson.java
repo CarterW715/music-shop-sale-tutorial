@@ -23,6 +23,7 @@ public class ShopLesson {
     @OneToOne(mappedBy = "shopLesson", cascade = CascadeType.ALL)
     LessonCancel lessonCancel = LessonCancel.builder().build();
 
+    @Column(name = "lesson_id")
     UUID lessonId;
 
     @Column(name = "inst_nm")
@@ -59,6 +60,7 @@ public class ShopLesson {
 
     String version;
 
+    @Column(name = "shop_id")
     UUID shopId;
 
     @Column(name = "shop_ctry")

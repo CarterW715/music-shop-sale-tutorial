@@ -19,10 +19,10 @@ public class ShopSale {
     @Column(name = "shop_sale_id")
     long id;
 
-    @Builder.Default
     @OneToOne(mappedBy = "shopSale", cascade = CascadeType.ALL)
-    ShopReturn shopReturn = ShopReturn.builder().build();
+    ShopReturn shopReturn;
 
+    @Column(name = "sale_id")
     UUID saleId;
 
     @Column(name = "inst_nm")
@@ -60,15 +60,13 @@ public class ShopSale {
     @Column(name = "msg_id")
     UUID messageId;
 
-    @Column(name = "evnt_type")
-    String eventType;
-
     @Column(name = "evnt_ts")
     LocalDateTime eventTimestamp;
 
     @Column(name = "msg_version")
     String messageVersion;
 
+    @Column(name = "shop_id")
     UUID shopId;
 
     @Column(name = "shop_ctry")

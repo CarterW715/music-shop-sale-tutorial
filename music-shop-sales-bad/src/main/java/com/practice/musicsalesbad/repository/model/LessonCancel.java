@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity
@@ -25,4 +28,12 @@ public class LessonCancel {
     @Column(name = "rfnd_amt")
     Double refundAmount;
 
+    @Column(name = "msg_id")
+    UUID messageId;
+
+    @Column(name = "evnt_ts")
+    LocalDateTime eventTimestamp;
+
+    @Column(name = "msg_version")
+    String version;
 }

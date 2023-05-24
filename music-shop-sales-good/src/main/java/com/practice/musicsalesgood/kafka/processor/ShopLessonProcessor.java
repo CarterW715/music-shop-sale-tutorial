@@ -19,7 +19,7 @@ public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<Shop
 
     @Override
     public boolean acceptsEventType(String eventType) {
-        return eventType.equals(MusicShopEvents.sale.name());
+        return eventType.equals(MusicShopEvents.lesson.name());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<Shop
 
     public void processEvent(MusicShopEvent message) {
 
-        var lessonSale = MessageMapper.MessageToShopLesson(message);
+        var lessonSale = MessageMapper.messageToShopLesson(message);
 
         try {
             shopLessonRepositoryImpl.saveShopLesson(lessonSale);

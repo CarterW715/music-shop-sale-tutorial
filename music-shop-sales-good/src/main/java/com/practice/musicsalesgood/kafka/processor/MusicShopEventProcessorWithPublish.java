@@ -19,13 +19,15 @@ public abstract class MusicShopEventProcessorWithPublish<T extends MusicShopProd
             getValidator().validateEvent(event);
             // Run business logic for implementing listener
             processEvent(event);
+            eventProducer.publishEvent(event);
         } catch (ProcessorValidationException ex) {
             log.error("Event failed processor validation with message: {}", ex.getMessage());
+            eventProducer.publishErrorEvent(event, ex.getMessage());
         } catch (Exception ex) {
             log.error(String.format("Unhandled Exception :: (%s) for Message %s", ex.getMessage(), "placeholder"));
+            eventProducer.publishErrorEvent(event, ex.getMessage());
         }
 
-        eventProducer.publishMessage(event);
     }
 
 }

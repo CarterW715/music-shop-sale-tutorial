@@ -40,7 +40,7 @@ public class ShopSaleProcessorValidator extends ProcessorValidator {
             errorList.add("Sale Date is required");
         }
 
-        if (sale.getSaleAmt() >= 0) {
+        if (sale.getSaleAmt() <= 0) {
             errorList.add("Sale amount must be greater than 0");
         }
     }

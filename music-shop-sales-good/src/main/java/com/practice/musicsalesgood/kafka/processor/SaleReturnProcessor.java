@@ -40,7 +40,7 @@ public class SaleReturnProcessor extends MusicShopEventProcessorWithPublish<Sale
 
         var sale = shopSaleRepositoryImpl.getSaleBySaleId(message.getReturns().getSaleId()).get();
 
-        var shopReturn = MessageMapper.MessageToSaleReturn(message, sale);
+        var shopReturn = MessageMapper.messageToSaleReturn(message, sale);
 
         try {
             shopReturnCancelRepositoryImpl.saveShopReturn(shopReturn);

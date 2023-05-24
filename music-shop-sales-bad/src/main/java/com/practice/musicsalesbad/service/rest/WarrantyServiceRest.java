@@ -1,7 +1,7 @@
 package com.practice.musicsalesbad.service.rest;
 
-import com.practice.musicsalesgood.service.rest.model.WarrantySubmitRequest;
-import com.practice.musicsalesgood.service.rest.model.WarrantySubmitResponse;
+import com.practice.musicsalesbad.service.rest.model.WarrantySubmitRequest;
+import com.practice.musicsalesbad.service.rest.model.WarrantySubmitResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;

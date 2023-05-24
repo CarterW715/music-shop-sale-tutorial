@@ -20,7 +20,7 @@ public class WarrantyProcessorValidator extends ProcessorValidator {
         } else {
             shopTransactionRepositoryImpl
                     .getSaleBySaleId(sale.getSaleId())
-                    .ifPresentOrElse(shopSale -> {}, () -> errorList.add("A sale with this id has already been recorded"));
+                    .ifPresentOrElse(shopSale -> {}, () -> errorList.add("Sale for warranty could not be found"));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.practice.controller;
 
+import com.practice.model.ExternalServiceResponse;
 import com.practice.model.request.RewardsSubmitRequest;
 import com.practice.model.response.RewardsResponse;
 import com.practice.service.RewardsService;
@@ -26,8 +27,8 @@ public class RewardsController {
     @POST
     @Path("/submit")
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse<RewardsResponse> processRewardsSubmission(@NonNull RewardsSubmitRequest request) {
-        return RestResponse.ok(rewardsService.processRewards(request));
+    public ExternalServiceResponse processRewardsSubmission(@NonNull RewardsSubmitRequest request) {
+        return ExternalServiceResponse.success(rewardsService.processRewards(request));
     }
 
 }

@@ -2,6 +2,10 @@ quarkus:
   http:
     cors: true
     port: 8081
+  kafka:
+    devservices:
+      topic-partitions:
+        music_sales_stream_local_good: 1
 
 kafka:
   bootstrap:
@@ -10,14 +14,14 @@ kafka:
 mp:
   messaging:
     incoming:
-      test-in:
-        topic: test
+      message-in-good:
+        topic: music_sales_stream_local_good
         connector: smallrye-kafka
         value:
-          deserializer: com.practice.musicsalesgood.kafka.serializer.TestMessageSerializer
+          deserializer: com.practice.kafka.serializer.MusicShopEventSerializer
     outgoing:
-      test-out:
+      message-out-good:
         connector: smallrye-kafka
-        topic: test
+        topic: music_sales_stream_local_good
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer

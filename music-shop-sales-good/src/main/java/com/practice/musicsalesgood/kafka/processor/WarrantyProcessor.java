@@ -12,18 +12,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Slf4j
 @ApplicationScoped
 public class WarrantyProcessor extends MusicShopEventProcessor<WarrantyProcessorValidator> {
 
     @Inject
-    ShopSaleRepository shopTransactionRepositoryImpl;
+    ShopSaleRepository shopSaleRepositoryImpl;
 
     @Inject
     WarrantyRepository warrantyRepositoryImpl;
 
-    @Inject
+    @RestClient
     WarrantyServiceRest warrantyServiceRest;
 
     @Override
@@ -38,16 +39,18 @@ public class WarrantyProcessor extends MusicShopEventProcessor<WarrantyProcessor
 
     @Override
     WarrantyProcessorValidator getValidator() {
-        return new WarrantyProcessorValidator(shopTransactionRepositoryImpl);
+        return new WarrantyProcessorValidator(shopSaleRepositoryImpl);
     }
 
     public void processEvent(MusicShopEvent message) {
 
-        var request = MessageMapper.MessageToWarrantyRequest(message);
+        var request = MessageMapper.messageToWarrantyRequest(message);
+
+        var sale = shopSaleRepositoryImpl.getSaleBySaleId(message.getSale().getSaleId()).get();
 
         try {
             var response = warrantyServiceRest.submitWarranty(request);
-            var warranty = WarrantyMapper.WarrantyResponseToEntity(response.getEntity(), message);
+            var warranty = WarrantyMapper.WarrantyResponseToEntity(response.getData(), message, sale);
             warrantyRepositoryImpl.saveWarranty(warranty);
         } catch (WebApplicationException ex) {
             log.error("Could not submit warranty successfully", ex);

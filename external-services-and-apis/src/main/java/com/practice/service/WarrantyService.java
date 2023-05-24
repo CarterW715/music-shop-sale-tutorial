@@ -10,7 +10,7 @@ import java.util.Random;
 @ApplicationScoped
 public class WarrantyService {
 
-    public Random RAND;
+    public Random RAND = new Random();
 
     public Warranty createWarranty(WarrantySubmitRequest request) {
         var now = LocalDateTime.now();

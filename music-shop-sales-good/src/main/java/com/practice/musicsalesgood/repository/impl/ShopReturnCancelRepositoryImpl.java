@@ -29,7 +29,7 @@ public class ShopReturnCancelRepositoryImpl implements SaleReturnRepository, Les
 
         query.setParameter("targetId", saleId);
 
-        return Optional.of(query.getSingleResult());
+        return query.getResultStream().findFirst();
     }
 
     @Transactional
@@ -43,6 +43,6 @@ public class ShopReturnCancelRepositoryImpl implements SaleReturnRepository, Les
 
         query.setParameter("targetId", saleId);
 
-        return Optional.of(query.getSingleResult());
+        return query.getResultStream().findFirst();
     }
 }

@@ -60,9 +60,6 @@ public class ShopSale {
     @Column(name = "msg_id")
     UUID messageId;
 
-    @Column(name = "evnt_type")
-    String eventType;
-
     @Column(name = "evnt_ts")
     LocalDateTime eventTimestamp;
 

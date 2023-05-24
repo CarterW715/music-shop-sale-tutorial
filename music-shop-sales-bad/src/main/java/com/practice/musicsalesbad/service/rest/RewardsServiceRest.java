@@ -1,7 +1,7 @@
 package com.practice.musicsalesbad.service.rest;
 
-import com.practice.musicsalesgood.service.rest.model.RewardsSubmitRequest;
-import com.practice.musicsalesgood.service.rest.model.RewardsSubmitResponse;
+import com.practice.musicsalesbad.service.rest.model.RewardsSubmitRequest;
+import com.practice.musicsalesbad.service.rest.model.RewardsSubmitResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;

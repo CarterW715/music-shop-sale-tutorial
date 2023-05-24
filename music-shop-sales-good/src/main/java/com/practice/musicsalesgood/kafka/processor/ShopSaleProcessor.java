@@ -33,7 +33,7 @@ public class ShopSaleProcessor extends MusicShopEventProcessorWithPublish<ShopSa
     }
 
     public void processEvent(MusicShopEvent message) {
-        var musicSale = MessageMapper.MessageToShopSale(message);
+        var musicSale = MessageMapper.messageToShopSale(message);
 
         try {
             shopTransactionRepositoryImpl.saveShopSale(musicSale);

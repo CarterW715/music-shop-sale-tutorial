@@ -6,14 +6,14 @@ import com.practice.musicsalesgood.mapper.MessageMapper;
 import com.practice.musicsalesgood.service.rest.RewardsServiceRest;
 import com.practice.musicsalesgood.validation.processor.RewardsProcessorValidator;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Slf4j
 @ApplicationScoped
 public class RewardsProcessor extends MusicShopEventProcessor<RewardsProcessorValidator> {
 
-    @Inject
+    @RestClient
     RewardsServiceRest rewardsServiceRest;
 
     @Override
@@ -33,12 +33,11 @@ public class RewardsProcessor extends MusicShopEventProcessor<RewardsProcessorVa
 
     public void processEvent(MusicShopEvent message) {
 
-        var request = MessageMapper.MessageToRewardsRequest(message);
+        var request = MessageMapper.messageToRewardsRequest(message);
 
-        try (var resonse = rewardsServiceRest.submitRewards(request)) {
-            if (resonse.getStatus() != 200) {
-                log.error("Something went wrong: {}", resonse.getStatusInfo());
-            }
+        var response = rewardsServiceRest.submitRewards(request);
+        if (response.getStatus().getCode() != 200) {
+            log.error("Something went wrong: {}", response.getStatus().getMessage());
         }
     }
 

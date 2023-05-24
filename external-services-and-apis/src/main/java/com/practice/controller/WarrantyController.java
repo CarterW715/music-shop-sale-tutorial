@@ -1,5 +1,6 @@
 package com.practice.controller;
 
+import com.practice.model.ExternalServiceResponse;
 import com.practice.model.Warranty;
 import com.practice.model.request.WarrantySubmitRequest;
 import com.practice.service.WarrantyService;
@@ -26,8 +27,8 @@ public class WarrantyController {
     @POST
     @Path("/submit")
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse<Warranty> processWarrantySubmission(@NonNull WarrantySubmitRequest request) {
-        return RestResponse.ok(warrantyService.createWarranty(request));
+    public ExternalServiceResponse processWarrantySubmission(@NonNull WarrantySubmitRequest request) {
+        return ExternalServiceResponse.success(warrantyService.createWarranty(request));
     }
 
 }
