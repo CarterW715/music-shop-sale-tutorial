@@ -6,8 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder(toBuilder = true)
 @NoArgsConstructor

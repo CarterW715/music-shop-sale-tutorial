@@ -44,6 +44,7 @@ public class SaleReturnProcessor extends MusicShopEventProcessorWithPublish<Sale
 
         try {
             shopReturnCancelRepositoryImpl.saveShopReturn(shopReturn);
+            log.info("Successfully returned sale: {}", sale.getSaleId());
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }

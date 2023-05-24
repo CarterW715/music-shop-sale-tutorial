@@ -64,7 +64,7 @@ public class MusicEventServiceImpl implements MusicEventService {
     public MusicShopEvent createLessonEvent() {
         var instrumentWithCode = seedService.getRandomInstrumentWithCode();
 
-        var saleAmt = (double) seedService.getRandomNumInRange(100, 10000);
+        var saleAmt = (double) seedService.getRandomNumInRange(10, 201);
         var taxAmt = saleAmt * .07;
         var grandTotal = saleAmt + taxAmt;
 
@@ -74,7 +74,7 @@ public class MusicEventServiceImpl implements MusicEventService {
                                 .messageId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
-                                .eventType(MusicShopEvents.sale.name())
+                                .eventType(MusicShopEvents.lesson.name())
                                 .build()
                 )
                 .shop(
@@ -91,7 +91,7 @@ public class MusicEventServiceImpl implements MusicEventService {
                                 .instrument(instrumentWithCode.getLeft())
                                 .teacherName(seedService.getRandomFullName())
                                 .customerName(seedService.getRandomFullName())
-                                .lessonDate(LocalDateTime.now())
+                                .lessonDate(LocalDateTime.now().plusDays(seedService.getRandomNumInRange(2, 8)))
                                 .saleAmt(saleAmt)
                                 .tax(taxAmt)
                                 .promoCode("")
@@ -104,30 +104,18 @@ public class MusicEventServiceImpl implements MusicEventService {
 
     @Override
     public MusicShopEvent createReturnEvent(UUID saleId, double refundAmt) {
-        var saleAmt = (double) seedService.getRandomNumInRange(100, 10000);
-        var taxAmt = saleAmt * .07;
-        var grandTotal = saleAmt + taxAmt;
-
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
                                 .messageId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
-                                .eventType(MusicShopEvents.sale.name())
-                                .build()
-                )
-                .shop(
-                        EventShop.builder()
-                                .shopId(UUID.randomUUID())
-                                .country("US")
-                                .state("TX")
-                                .name(seedService.getRandomShopName())
+                                .eventType(MusicShopEvents.returns.name())
                                 .build()
                 )
                 .returns(
                         EventReturn.builder()
-                                .saleId(UUID.randomUUID())
+                                .saleId(saleId)
                                 .returnDate(LocalDateTime.now())
                                 .refundAmt(refundAmt)
                                 .build()
@@ -137,10 +125,6 @@ public class MusicEventServiceImpl implements MusicEventService {
 
     @Override
     public MusicShopEvent createCancelEvent(UUID lessonId, double refundAmt) {
-        var saleAmt = (double) seedService.getRandomNumInRange(100, 10000);
-        var taxAmt = saleAmt * .07;
-        var grandTotal = saleAmt + taxAmt;
-
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
@@ -148,14 +132,6 @@ public class MusicEventServiceImpl implements MusicEventService {
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
                                 .eventType(MusicShopEvents.cancel.name())
-                                .build()
-                )
-                .shop(
-                        EventShop.builder()
-                                .shopId(UUID.randomUUID())
-                                .country("US")
-                                .state("TX")
-                                .name(seedService.getRandomShopName())
                                 .build()
                 )
                 .cancel(
@@ -168,17 +144,19 @@ public class MusicEventServiceImpl implements MusicEventService {
     }
 
     @Override
-    public MusicShopEvent createSoldEvent() {
+    public MusicShopEvent createSoldEvent(UUID saleId) {
         var saleEvent = createSaleEvent();
         saleEvent.getHeader().setEventType(MusicShopEvents.sold.name());
+        saleEvent.getSale().setSaleId(saleId);
 
         return saleEvent;
     }
 
     @Override
-    public MusicShopEvent createScheduledEvent() {
+    public MusicShopEvent createScheduledEvent(UUID lessonId) {
         var lessonEvent = createLessonEvent();
         lessonEvent.getHeader().setEventType(MusicShopEvents.scheduled.name());
+        lessonEvent.getLesson().setLessonId(lessonId);
 
         return lessonEvent;
     }

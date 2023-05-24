@@ -38,6 +38,7 @@ public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<Shop
 
         try {
             shopLessonRepositoryImpl.saveShopLesson(lessonSale);
+            log.info("Successfully scheduled lesson: {}", lessonSale.getLessonId());
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }

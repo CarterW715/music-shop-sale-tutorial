@@ -8,6 +8,8 @@ import io.smallrye.common.constraint.NotNull;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
@@ -36,26 +38,39 @@ public class ShopEventController {
 
     @POST
     @Path("/send/return")
-    public ExternalServiceResponse sendShopReturnEvent(@NotNull UUID saleId, @NotNull double refundAmt) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopReturnEvent(saleId, refundAmt));
+    public ExternalServiceResponse sendShopReturnEvent(@NotNull ReturnRequest request) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopReturnEvent(request.getSaleId(), request.getRefundAmt()));
     }
 
     @POST
     @Path("/send/cancel")
-    public ExternalServiceResponse sendShopCancelEvent(@NotNull UUID saleId, @NotNull double refundAmt) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopCancelEvent(saleId, refundAmt));
+    public ExternalServiceResponse sendShopCancelEvent(@NotNull CancelRequest request) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopCancelEvent(request.getLessonId(), request.getRefundAmt()));
     }
 
     @POST
     @Path("/send/sold")
-    public ExternalServiceResponse sendShopSoldEvent() {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSaleEvent());
+    public ExternalServiceResponse sendShopSoldEvent(@NotNull UUID saleId) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(saleId));
     }
 
     @POST
     @Path("/send/scheduled")
-    public ExternalServiceResponse sendJson() {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopScheduledEvent());
+    public ExternalServiceResponse sendShopScheduledEvent(@NotNull UUID lessonId) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(lessonId));
     }
 
+    @Data
+    @AllArgsConstructor
+    static class ReturnRequest {
+        UUID saleId;
+        double refundAmt;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class CancelRequest {
+        UUID lessonId;
+        double refundAmt;
+    }
 }

@@ -51,8 +51,9 @@ public class MessageMapper {
                 .discountAmount(lesson.getDiscountAmt())
                 .grandTotal(lesson.getGrandTotal())
                 .instrument(lesson.getInstrument())
-                .version(header.getVersion())
+                .messageVersion(header.getVersion())
                 .promoCode(lesson.getPromoCode())
+                .tax(lesson.getTax())
                 .saleAmount(lesson.getSaleAmt())
                 .lessonDate(lesson.getLessonDate())
                 .shopCountry(shop.getCountry())
@@ -76,13 +77,13 @@ public class MessageMapper {
 
     public static LessonCancel messageToLessonCancel(MusicShopEvent message, ShopLesson lesson) {
         var header = message.getHeader();
-        var returns = message.getReturns();
+        var cancel = message.getCancel();
         return LessonCancel.builder()
                 .shopLesson(lesson)
                 .messageId(header.getMessageId())
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
-                .refundAmount(returns.getRefundAmt())
+                .refundAmount(cancel.getRefundAmt())
                 .build();
     }
 

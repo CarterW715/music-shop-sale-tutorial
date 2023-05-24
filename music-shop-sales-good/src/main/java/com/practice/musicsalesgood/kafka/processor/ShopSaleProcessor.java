@@ -37,6 +37,7 @@ public class ShopSaleProcessor extends MusicShopEventProcessorWithPublish<ShopSa
 
         try {
             shopTransactionRepositoryImpl.saveShopSale(musicSale);
+            log.info("Successfully sold instrument: {}", musicSale.getSaleId());
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }

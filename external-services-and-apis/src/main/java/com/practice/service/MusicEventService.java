@@ -14,8 +14,8 @@ public interface MusicEventService {
 
     MusicShopEvent createCancelEvent(UUID lessonId, double refundAmt);
 
-    MusicShopEvent createSoldEvent();
+    MusicShopEvent createSoldEvent(UUID saleId);
 
-    MusicShopEvent createScheduledEvent();
+    MusicShopEvent createScheduledEvent(UUID lessonId);
 
 }

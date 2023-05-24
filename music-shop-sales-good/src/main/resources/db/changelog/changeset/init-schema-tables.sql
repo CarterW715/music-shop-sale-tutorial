@@ -27,9 +27,9 @@ create table good.shop_sale
 create table good.shop_lesson
 (
     shop_lesson_id serial primary key,
-    sale_id        uuid         not null,
+    lesson_id      uuid         not null,
     inst_nm        varchar(100) not null,
-    tchr_nm        timestamp    not null,
+    tchr_nm        varchar(100)    not null,
     cust_nm        varchar(100) not null,
     lesson_dt      timestamp    not null,
     sale_amt       decimal      not null,
@@ -49,22 +49,22 @@ create table good.shop_lesson
 create table good.shop_return
 (
     shop_return_id serial primary key,
-    shop_sale_id   integer   not null references good.shop_sale,
-    rfnd_amt       decimal   not null,
-    rtrn_dt        timestamp not null,
-    msg_id           uuid         not null,
-    evnt_ts          timestamp    not null,
-    msg_version      varchar(12)  not null
+    shop_sale_id   integer     not null references good.shop_sale,
+    rfnd_amt       decimal     not null,
+    rtrn_dt        timestamp   not null,
+    msg_id         uuid        not null,
+    evnt_ts        timestamp   not null,
+    msg_version    varchar(12) not null
 );
 
 create table good.lesson_cancel
 (
-    shop_return_id serial primary key,
-    shop_lesson_id integer not null references good.shop_lesson,
-    rfnd_amt       decimal not null,
-    msg_id           uuid         not null,
-    evnt_ts          timestamp    not null,
-    msg_version      varchar(12)  not null
+    lesson_cncl_id serial primary key,
+    shop_lesson_id integer     not null references good.shop_lesson,
+    rfnd_amt       decimal     not null,
+    msg_id         uuid        not null,
+    evnt_ts        timestamp   not null,
+    msg_version    varchar(12) not null
 );
 
 create table good.sale_warranty

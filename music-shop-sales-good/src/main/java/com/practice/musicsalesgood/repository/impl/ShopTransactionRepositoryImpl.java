@@ -40,6 +40,7 @@ public class ShopTransactionRepositoryImpl implements ShopSaleRepository, ShopLe
         return query.getResultStream().findFirst();
     }
 
+    @ActivateRequestContext
     public Optional<ShopLesson> getLessonByLessonId(UUID lessonId) {
         var query = entityManager
                 .createQuery("Select lesson from ShopLesson lesson where lesson.lessonId = :targetId", ShopLesson.class);

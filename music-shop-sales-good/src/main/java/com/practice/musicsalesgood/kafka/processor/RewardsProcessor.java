@@ -38,6 +38,8 @@ public class RewardsProcessor extends MusicShopEventProcessor<RewardsProcessorVa
         var response = rewardsServiceRest.submitRewards(request);
         if (response.getStatus().getCode() != 200) {
             log.error("Something went wrong: {}", response.getStatus().getMessage());
+        } else {
+            log.info("Rewards successfully awarded");
         }
     }
 

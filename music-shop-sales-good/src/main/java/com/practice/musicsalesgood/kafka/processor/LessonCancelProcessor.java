@@ -23,7 +23,7 @@ public class LessonCancelProcessor extends MusicShopEventProcessorWithPublish<Le
 
     @Override
     public boolean acceptsEventType(String eventType) {
-        return eventType.equals(MusicShopEvents.returns.name());
+        return eventType.equals(MusicShopEvents.cancel.name());
     }
 
     @Override
@@ -38,12 +38,13 @@ public class LessonCancelProcessor extends MusicShopEventProcessorWithPublish<Le
 
     public void processEvent(MusicShopEvent message) {
 
-        var lesson = shopTransactionRepositoryImpl.getLessonByLessonId(message.getLesson().getLessonId()).get();
+        var lesson = shopTransactionRepositoryImpl.getLessonByLessonId(message.getCancel().getLessonId()).get();
 
         var lessonCancel = MessageMapper.messageToLessonCancel(message, lesson);
 
         try {
             shopReturnCancelRepositoryImpl.saveLessonCancel(lessonCancel);
+            log.info("Successfully canceled lesson: {}", lesson.getLessonId());
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }

@@ -4,7 +4,9 @@ import com.practice.musicsalesgood.repository.LessonCancelRepository;
 import com.practice.musicsalesgood.repository.SaleReturnRepository;
 import com.practice.musicsalesgood.repository.model.LessonCancel;
 import com.practice.musicsalesgood.repository.model.ShopReturn;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -12,7 +14,7 @@ import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-@Dependent
+@ApplicationScoped
 public class ShopReturnCancelRepositoryImpl implements SaleReturnRepository, LessonCancelRepository {
 
     @Inject
@@ -23,6 +25,7 @@ public class ShopReturnCancelRepositoryImpl implements SaleReturnRepository, Les
         entityManager.persist(data);
     }
 
+    @ActivateRequestContext
     public Optional<ShopReturn> getReturnBySaleId(UUID saleId) {
         var query = entityManager
                 .createQuery("Select return from ShopReturn return where return.shopSale.saleId = :targetId", ShopReturn.class);
@@ -37,11 +40,12 @@ public class ShopReturnCancelRepositoryImpl implements SaleReturnRepository, Les
         entityManager.persist(data);
     }
 
-    public Optional<LessonCancel> getCancelByLessonId(UUID saleId) {
+    @ActivateRequestContext
+    public Optional<LessonCancel> getCancelByLessonId(UUID lessonId) {
         var query = entityManager
-                .createQuery("Select return from LessonCancel return where return.shopLesson.lessonId = :targetId", LessonCancel.class);
+                .createQuery("Select cancel from LessonCancel cancel where cancel.shopLesson.lessonId = :targetId", LessonCancel.class);
 
-        query.setParameter("targetId", saleId);
+        query.setParameter("targetId", lessonId);
 
         return query.getResultStream().findFirst();
     }

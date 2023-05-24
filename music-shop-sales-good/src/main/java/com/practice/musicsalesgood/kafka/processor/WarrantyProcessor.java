@@ -52,6 +52,7 @@ public class WarrantyProcessor extends MusicShopEventProcessor<WarrantyProcessor
             var response = warrantyServiceRest.submitWarranty(request);
             var warranty = WarrantyMapper.WarrantyResponseToEntity(response.getData(), message, sale);
             warrantyRepositoryImpl.saveWarranty(warranty);
+            log.info("Successfully started warranty for sale: {}", sale.getSaleId());
         } catch (WebApplicationException ex) {
             log.error("Could not submit warranty successfully", ex);
         } catch (Exception ex) {

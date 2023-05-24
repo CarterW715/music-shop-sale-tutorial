@@ -4,6 +4,8 @@ import com.practice.kafka.model.MusicShopEvent;
 import com.practice.service.MusicEventService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
@@ -37,22 +39,21 @@ public class ShopEventProducer {
         return event;
     }
 
-    public MusicShopEvent publishMusicShopCancelEvent(UUID saleId, double refundAmt) {
-        var event = musicEventServiceImpl.createCancelEvent(saleId, refundAmt);
+    public MusicShopEvent publishMusicShopCancelEvent(UUID lessonId, double refundAmt) {
+        var event = musicEventServiceImpl.createCancelEvent(lessonId, refundAmt);
         messageEmitterGood.send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopSoldEvent() {
-        var event = musicEventServiceImpl.createSoldEvent();
+    public MusicShopEvent publishMusicShopSoldEvent(UUID saleId) {
+        var event = musicEventServiceImpl.createSoldEvent(saleId);
         messageEmitterGood.send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopScheduledEvent() {
-        var event = musicEventServiceImpl.createScheduledEvent();
+    public MusicShopEvent publishMusicShopScheduledEvent(UUID lessonId) {
+        var event = musicEventServiceImpl.createScheduledEvent(lessonId);
         messageEmitterGood.send(event);
         return event;
     }
-
 }
