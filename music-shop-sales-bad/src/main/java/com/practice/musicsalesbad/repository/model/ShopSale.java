@@ -1,28 +1,30 @@
 package com.practice.musicsalesbad.repository.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "shop_sale", schema = "good")
+@Table(name = "shop_sale", schema = "bad")
 public class ShopSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_sale_id")
     long id;
 
-    @Builder.Default
     @OneToOne(mappedBy = "shopSale", cascade = CascadeType.ALL)
-    ShopReturn shopReturn = ShopReturn.builder().build();
+    ShopReturn shopReturn;
 
+    @Column(name = "sale_id")
     UUID saleId;
 
     @Column(name = "inst_nm")
@@ -66,6 +68,7 @@ public class ShopSale {
     @Column(name = "msg_version")
     String messageVersion;
 
+    @Column(name = "shop_id")
     UUID shopId;
 
     @Column(name = "shop_ctry")

@@ -3,7 +3,7 @@ package com.practice.musicsalesgood.kafka.processor;
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.kafka.producer.ShopLessonProducer;
-import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.EventMapper;
 import com.practice.musicsalesgood.repository.ShopLessonRepository;
 import com.practice.musicsalesgood.validation.processor.ShopLessonProcessorValidator;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,9 +32,9 @@ public class ShopLessonProcessor extends MusicShopEventProcessorWithPublish<Shop
         return new ShopLessonProcessorValidator(shopLessonRepositoryImpl);
     }
 
-    public void processEvent(MusicShopEvent message) {
+    public void processEvent(MusicShopEvent event) {
 
-        var lessonSale = MessageMapper.messageToShopLesson(message);
+        var lessonSale = EventMapper.eventToShopLesson(event);
 
         try {
             shopLessonRepositoryImpl.saveShopLesson(lessonSale);

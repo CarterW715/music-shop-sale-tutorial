@@ -30,6 +30,7 @@ public class EventMapper {
                 .promoCode(sale.getPromoCode())
                 .saleAmount(sale.getSaleAmt())
                 .saleDate(sale.getSaleDate())
+                .tax(sale.getTax())
                 .shopCountry(shop.getCountry())
                 .shopName(shop.getName())
                 .shopState(shop.getState())
@@ -50,8 +51,9 @@ public class EventMapper {
                 .discountAmount(lesson.getDiscountAmt())
                 .grandTotal(lesson.getGrandTotal())
                 .instrument(lesson.getInstrument())
-                .version(header.getVersion())
+                .messageVersion(header.getVersion())
                 .promoCode(lesson.getPromoCode())
+                .tax(lesson.getTax())
                 .saleAmount(lesson.getSaleAmt())
                 .lessonDate(lesson.getLessonDate())
                 .shopCountry(shop.getCountry())
@@ -75,13 +77,13 @@ public class EventMapper {
 
     public static LessonCancel eventToLessonCancel(MusicShopEvent event, ShopLesson lesson) {
         var header = event.getHeader();
-        var returns = event.getReturns();
+        var cancel = event.getCancel();
         return LessonCancel.builder()
                 .shopLesson(lesson)
                 .messageId(header.getMessageId())
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
-                .refundAmount(returns.getRefundAmt())
+                .refundAmount(cancel.getRefundAmt())
                 .build();
     }
 

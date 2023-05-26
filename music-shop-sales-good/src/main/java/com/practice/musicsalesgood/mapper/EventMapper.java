@@ -8,15 +8,15 @@ import com.practice.musicsalesgood.repository.model.ShopSale;
 import com.practice.musicsalesgood.service.rest.model.RewardsSubmitRequest;
 import com.practice.musicsalesgood.service.rest.model.WarrantySubmitRequest;
 
-public class MessageMapper {
+public class EventMapper {
 
-    public static ShopSale messageToShopSale(MusicShopEvent message) {
-        var header = message.getHeader();
-        var shop = message.getShop();
-        var sale = message.getSale();
+    public static ShopSale eventToShopSale(MusicShopEvent event) {
+        var header = event.getHeader();
+        var shop = event.getShop();
+        var sale = event.getSale();
         return ShopSale.builder()
                 .saleId(sale.getSaleId())
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .shopId(shop.getShopId())
                 .customerName(sale.getCustomerName())
                 .employeeName(sale.getEmployeeName())
@@ -37,13 +37,13 @@ public class MessageMapper {
                 .build();
     }
 
-    public static ShopLesson messageToShopLesson(MusicShopEvent message) {
-        var header = message.getHeader();
-        var shop = message.getShop();
-        var lesson = message.getLesson();
+    public static ShopLesson eventToShopLesson(MusicShopEvent event) {
+        var header = event.getHeader();
+        var shop = event.getShop();
+        var lesson = event.getLesson();
         return ShopLesson.builder()
                 .lessonId(lesson.getLessonId())
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .shopId(shop.getShopId())
                 .customerName(lesson.getCustomerName())
                 .teacherName(lesson.getTeacherName())
@@ -62,12 +62,12 @@ public class MessageMapper {
                 .build();
     }
 
-    public static ShopReturn messageToSaleReturn(MusicShopEvent message, ShopSale sale) {
-        var header = message.getHeader();
-        var returns = message.getReturns();
+    public static ShopReturn eventToSaleReturn(MusicShopEvent event, ShopSale sale) {
+        var header = event.getHeader();
+        var returns = event.getReturns();
         return ShopReturn.builder()
                 .shopSale(sale)
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
                 .refundAmount(returns.getRefundAmt())
@@ -75,20 +75,20 @@ public class MessageMapper {
                 .build();
     }
 
-    public static LessonCancel messageToLessonCancel(MusicShopEvent message, ShopLesson lesson) {
-        var header = message.getHeader();
-        var cancel = message.getCancel();
+    public static LessonCancel eventToLessonCancel(MusicShopEvent event, ShopLesson lesson) {
+        var header = event.getHeader();
+        var cancel = event.getCancel();
         return LessonCancel.builder()
                 .shopLesson(lesson)
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
                 .refundAmount(cancel.getRefundAmt())
                 .build();
     }
 
-    public static WarrantySubmitRequest messageToWarrantyRequest(MusicShopEvent message) {
-        var sale = message.getSale();
+    public static WarrantySubmitRequest eventToWarrantyRequest(MusicShopEvent event) {
+        var sale = event.getSale();
         return WarrantySubmitRequest.builder()
                 .saleId(sale.getSaleId())
                 .instrumentName(sale.getInstrument())
@@ -97,12 +97,12 @@ public class MessageMapper {
                 .build();
     }
 
-    public static RewardsSubmitRequest messageToRewardsRequest(MusicShopEvent message) {
+    public static RewardsSubmitRequest eventToRewardsRequest(MusicShopEvent event) {
         var request = RewardsSubmitRequest.builder().build();
-        if (message.getSale() != null) {
-            request.setEmployeeName(message.getSale().getEmployeeName());
+        if (event.getSale() != null) {
+            request.setEmployeeName(event.getSale().getEmployeeName());
         } else {
-            request.setTeacherName(message.getLesson().getTeacherName());
+            request.setTeacherName(event.getLesson().getTeacherName());
         }
         return request;
     }

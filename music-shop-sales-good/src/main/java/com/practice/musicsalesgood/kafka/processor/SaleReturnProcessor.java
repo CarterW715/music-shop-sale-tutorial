@@ -3,7 +3,7 @@ package com.practice.musicsalesgood.kafka.processor;
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.kafka.producer.SaleReturnProducer;
-import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.EventMapper;
 import com.practice.musicsalesgood.repository.SaleReturnRepository;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;
 import com.practice.musicsalesgood.validation.processor.SaleReturnProcessorValidator;
@@ -36,11 +36,11 @@ public class SaleReturnProcessor extends MusicShopEventProcessorWithPublish<Sale
         return new SaleReturnProcessorValidator(shopReturnCancelRepositoryImpl, shopSaleRepositoryImpl);
     }
 
-    public void processEvent(MusicShopEvent message) {
+    public void processEvent(MusicShopEvent event) {
 
-        var sale = shopSaleRepositoryImpl.getSaleBySaleId(message.getReturns().getSaleId()).get();
+        var sale = shopSaleRepositoryImpl.getSaleBySaleId(event.getReturns().getSaleId()).get();
 
-        var shopReturn = MessageMapper.messageToSaleReturn(message, sale);
+        var shopReturn = EventMapper.eventToSaleReturn(event, sale);
 
         try {
             shopReturnCancelRepositoryImpl.saveShopReturn(shopReturn);

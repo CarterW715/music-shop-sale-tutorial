@@ -1,5 +1,6 @@
 package com.practice.kafka;
 
+import com.practice.enums.ProjectType;
 import com.practice.kafka.model.MusicShopEvent;
 import com.practice.service.MusicEventService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,41 +20,61 @@ public class ShopEventProducer {
     Emitter<MusicShopEvent> messageEmitterGood;
 
     @Inject
+    @Channel("message-out-bad")
+    Emitter<MusicShopEvent> messageEmitterBad;
+
+    @Inject
+    @Channel("message-out-practice")
+    Emitter<MusicShopEvent> messageEmitterPractice;
+
+    @Inject
     MusicEventService musicEventServiceImpl;
 
-    public MusicShopEvent publishMusicShopSaleEvent() {
+    private Emitter<MusicShopEvent> getMessageEmitter(ProjectType projectType) {
+        switch (projectType) {
+            default:
+            case GOOD:
+                return messageEmitterGood;
+            case BAD:
+                return messageEmitterBad;
+            case PRACTICE:
+                return messageEmitterPractice;
+        }
+    }
+
+    public MusicShopEvent publishMusicShopSaleEvent(ProjectType projectType) {
         var event = musicEventServiceImpl.createSaleEvent();
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopLessonEvent() {
+    public MusicShopEvent publishMusicShopLessonEvent(ProjectType projectType) {
         var event = musicEventServiceImpl.createLessonEvent();
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopReturnEvent(UUID saleId, double refundAmt) {
+    public MusicShopEvent publishMusicShopReturnEvent(ProjectType projectType, UUID saleId, double refundAmt) {
         var event = musicEventServiceImpl.createReturnEvent(saleId, refundAmt);
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopCancelEvent(UUID lessonId, double refundAmt) {
+    public MusicShopEvent publishMusicShopCancelEvent(ProjectType projectType, UUID lessonId, double refundAmt) {
         var event = musicEventServiceImpl.createCancelEvent(lessonId, refundAmt);
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopSoldEvent(UUID saleId) {
+    public MusicShopEvent publishMusicShopSoldEvent(ProjectType projectType, UUID saleId) {
         var event = musicEventServiceImpl.createSoldEvent(saleId);
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 
-    public MusicShopEvent publishMusicShopScheduledEvent(UUID lessonId) {
+    public MusicShopEvent publishMusicShopScheduledEvent(ProjectType projectType, UUID lessonId) {
         var event = musicEventServiceImpl.createScheduledEvent(lessonId);
-        messageEmitterGood.send(event);
+        getMessageEmitter(projectType).send(event);
         return event;
     }
 }

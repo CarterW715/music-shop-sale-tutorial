@@ -39,7 +39,7 @@ public class ProcessorController {
 
         if (processor.isPresent()) {
             try {
-                processor.get().handleMessage(event);
+                processor.get().handleEvent(event);
             } catch (Exception ex) {
                 return RestResponse.status(400, "Error processing message. Check logs for details");
             }

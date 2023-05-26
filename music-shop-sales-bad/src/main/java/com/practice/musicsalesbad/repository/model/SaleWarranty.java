@@ -1,7 +1,6 @@
 package com.practice.musicsalesbad.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "sale_warranty", schema = "good")
+@Table(name = "sale_warranty", schema = "bad")
 public class SaleWarranty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

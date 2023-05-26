@@ -1,5 +1,6 @@
 package com.practice.controller;
 
+import com.practice.enums.ProjectType;
 import com.practice.kafka.ShopEventProducer;
 import com.practice.kafka.model.MusicShopEvent;
 import com.practice.model.ExternalServiceResponse;
@@ -26,38 +27,42 @@ public class ShopEventController {
 
     @POST
     @Path("/send/sale")
-    public ExternalServiceResponse sendShopSaleEvent() {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSaleEvent());
+    public ExternalServiceResponse sendShopSaleEvent(@QueryParam("projType") ProjectType projectType) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSaleEvent(projectType));
     }
 
     @POST
     @Path("/send/lesson")
-    public ExternalServiceResponse sendShopLessonEvent() {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopLessonEvent());
+    public ExternalServiceResponse sendShopLessonEvent(@QueryParam("projType") ProjectType projectType) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopLessonEvent(projectType));
     }
 
     @POST
     @Path("/send/return")
-    public ExternalServiceResponse sendShopReturnEvent(@NotNull ReturnRequest request) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopReturnEvent(request.getSaleId(), request.getRefundAmt()));
+    public ExternalServiceResponse sendShopReturnEvent(@QueryParam("projType") ProjectType projectType,
+                                                       @NotNull ReturnRequest request) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopReturnEvent(projectType, request.getSaleId(), request.getRefundAmt()));
     }
 
     @POST
     @Path("/send/cancel")
-    public ExternalServiceResponse sendShopCancelEvent(@NotNull CancelRequest request) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopCancelEvent(request.getLessonId(), request.getRefundAmt()));
+    public ExternalServiceResponse sendShopCancelEvent(@QueryParam("projType") ProjectType projectType,
+                                                       @NotNull CancelRequest request) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopCancelEvent(projectType, request.getLessonId(), request.getRefundAmt()));
     }
 
     @POST
     @Path("/send/sold")
-    public ExternalServiceResponse sendShopSoldEvent(@NotNull UUID saleId) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(saleId));
+    public ExternalServiceResponse sendShopSoldEvent(@QueryParam("projType") ProjectType projectType,
+                                                     @NotNull UUID saleId) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(projectType, saleId));
     }
 
     @POST
     @Path("/send/scheduled")
-    public ExternalServiceResponse sendShopScheduledEvent(@NotNull UUID lessonId) {
-        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(lessonId));
+    public ExternalServiceResponse sendShopScheduledEvent(@QueryParam("projType") ProjectType projectType,
+                                                          @NotNull UUID lessonId) {
+        return ExternalServiceResponse.success(shopEventProducer.publishMusicShopSoldEvent(projectType, lessonId));
     }
 
     @Data

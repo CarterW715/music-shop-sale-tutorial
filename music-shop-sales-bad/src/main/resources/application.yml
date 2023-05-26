@@ -31,13 +31,13 @@ kafka:
 mp:
   messaging:
     incoming:
-      message-in:
+      event-in:
         topic: music_sales_stream_local_bad
         connector: smallrye-kafka
         value:
           deserializer: com.practice.musicsalesbad.kafka.serializer.MusicShopEventSerializer
     outgoing:
-      message-out:
+      event-out:
         connector: smallrye-kafka
         topic: music_sales_stream_local_bad
         value:

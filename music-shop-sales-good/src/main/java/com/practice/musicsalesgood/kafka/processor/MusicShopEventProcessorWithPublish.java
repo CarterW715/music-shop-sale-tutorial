@@ -13,7 +13,7 @@ public abstract class MusicShopEventProcessorWithPublish<T extends MusicShopProd
     @Inject
     T eventProducer;
 
-    public void handleMessage(MusicShopEvent event) {
+    public void handleEvent(MusicShopEvent event) {
 
         try {
             getValidator().validateEvent(event);
@@ -24,7 +24,7 @@ public abstract class MusicShopEventProcessorWithPublish<T extends MusicShopProd
             log.error("Event failed processor validation with message: {}", ex.getMessage());
             eventProducer.publishErrorEvent(event, ex.getMessage());
         } catch (Exception ex) {
-            log.error(String.format("Unhandled Exception :: (%s) for Message %s", ex.getMessage(), "placeholder"));
+            log.error(String.format("Error processing event: %s with error: %s", event.getHeader().getEventId(), ex.getMessage()));
             eventProducer.publishErrorEvent(event, ex.getMessage());
         }
 

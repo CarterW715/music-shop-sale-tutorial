@@ -3,6 +3,7 @@ package com.practice.musicsalesbad.kafka.consumer;
 import com.practice.musicsalesbad.kafka.events.MusicShopEvents;
 import com.practice.musicsalesbad.kafka.model.MusicShopEvent;
 import com.practice.musicsalesbad.service.KafkaEventService;
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
@@ -18,10 +19,11 @@ public class KafkaEventConsumer {
     @Inject
     KafkaEventService kafkaEventServiceImpl;
 
-    @Incoming("message-in")
+    @Blocking
+    @Incoming("event-in")
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
     public void consume(MusicShopEvent event) {
-        log.info("Received kafka event: " + event.toString());
+        log.info("Received kafka event with id: {} and type: {}", event.getHeader().getMessageId(), event.getHeader().getEventType());
 
         if (event.getHeader().getEventType().equals(MusicShopEvents.sale.name())) {
             kafkaEventServiceImpl.handleSaleEvent(event);

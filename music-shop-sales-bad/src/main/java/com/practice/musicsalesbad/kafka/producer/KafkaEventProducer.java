@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ApplicationScoped
 public class KafkaEventProducer {
     @Inject
-    @Channel("test-out")
+    @Channel("message-out")
     Emitter<MusicShopEvent> musicShopEventEmitter;
 
     public void publishSoldMessage(MusicShopEvent message) {

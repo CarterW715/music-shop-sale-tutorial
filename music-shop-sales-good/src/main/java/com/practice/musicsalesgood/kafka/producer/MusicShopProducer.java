@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public abstract class MusicShopProducer {
     @Inject
-    @Channel("message-out")
+    @Channel("event-out")
     Emitter<MusicShopEvent> musicShopEventEmitter;
 
     public void publishErrorEvent(MusicShopEvent event, String error) {

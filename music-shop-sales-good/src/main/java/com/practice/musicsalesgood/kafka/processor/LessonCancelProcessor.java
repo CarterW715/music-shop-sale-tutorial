@@ -3,7 +3,7 @@ package com.practice.musicsalesgood.kafka.processor;
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
 import com.practice.musicsalesgood.kafka.producer.LessonCanceledProducer;
-import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.EventMapper;
 import com.practice.musicsalesgood.repository.LessonCancelRepository;
 import com.practice.musicsalesgood.repository.ShopLessonRepository;
 import com.practice.musicsalesgood.validation.processor.LessonCancelProcessorValidator;
@@ -36,11 +36,11 @@ public class LessonCancelProcessor extends MusicShopEventProcessorWithPublish<Le
         return new LessonCancelProcessorValidator(shopReturnCancelRepositoryImpl, shopTransactionRepositoryImpl);
     }
 
-    public void processEvent(MusicShopEvent message) {
+    public void processEvent(MusicShopEvent event) {
 
-        var lesson = shopTransactionRepositoryImpl.getLessonByLessonId(message.getCancel().getLessonId()).get();
+        var lesson = shopTransactionRepositoryImpl.getLessonByLessonId(event.getCancel().getLessonId()).get();
 
-        var lessonCancel = MessageMapper.messageToLessonCancel(message, lesson);
+        var lessonCancel = EventMapper.eventToLessonCancel(event, lesson);
 
         try {
             shopReturnCancelRepositoryImpl.saveLessonCancel(lessonCancel);

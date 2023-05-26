@@ -2,7 +2,7 @@ package com.practice.musicsalesgood.kafka.processor;
 
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.EventMapper;
 import com.practice.musicsalesgood.service.rest.RewardsServiceRest;
 import com.practice.musicsalesgood.validation.processor.RewardsProcessorValidator;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,9 +31,9 @@ public class RewardsProcessor extends MusicShopEventProcessor<RewardsProcessorVa
         return new RewardsProcessorValidator();
     }
 
-    public void processEvent(MusicShopEvent message) {
+    public void processEvent(MusicShopEvent event) {
 
-        var request = MessageMapper.messageToRewardsRequest(message);
+        var request = EventMapper.eventToRewardsRequest(event);
 
         var response = rewardsServiceRest.submitRewards(request);
         if (response.getStatus().getCode() != 200) {

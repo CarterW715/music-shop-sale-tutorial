@@ -2,7 +2,7 @@ package com.practice.musicsalesgood.kafka.processor;
 
 import com.practice.musicsalesgood.kafka.events.MusicShopEvents;
 import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
-import com.practice.musicsalesgood.mapper.MessageMapper;
+import com.practice.musicsalesgood.mapper.EventMapper;
 import com.practice.musicsalesgood.mapper.WarrantyMapper;
 import com.practice.musicsalesgood.repository.ShopSaleRepository;
 import com.practice.musicsalesgood.repository.WarrantyRepository;
@@ -42,15 +42,15 @@ public class WarrantyProcessor extends MusicShopEventProcessor<WarrantyProcessor
         return new WarrantyProcessorValidator(shopSaleRepositoryImpl);
     }
 
-    public void processEvent(MusicShopEvent message) {
+    public void processEvent(MusicShopEvent event) {
 
-        var request = MessageMapper.messageToWarrantyRequest(message);
+        var request = EventMapper.eventToWarrantyRequest(event);
 
-        var sale = shopSaleRepositoryImpl.getSaleBySaleId(message.getSale().getSaleId()).get();
+        var sale = shopSaleRepositoryImpl.getSaleBySaleId(event.getSale().getSaleId()).get();
 
         try {
             var response = warrantyServiceRest.submitWarranty(request);
-            var warranty = WarrantyMapper.WarrantyResponseToEntity(response.getData(), message, sale);
+            var warranty = WarrantyMapper.warrantyResponseToEntity(response.getData(), event, sale);
             warrantyRepositoryImpl.saveWarranty(warranty);
             log.info("Successfully started warranty for sale: {}", sale.getSaleId());
         } catch (WebApplicationException ex) {

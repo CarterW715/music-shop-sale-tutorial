@@ -7,12 +7,12 @@ import com.practice.musicsalesgood.service.rest.model.WarrantySubmitResponse;
 
 public class WarrantyMapper {
 
-    public static SaleWarranty WarrantyResponseToEntity(WarrantySubmitResponse response, MusicShopEvent event, ShopSale sale) {
+    public static SaleWarranty warrantyResponseToEntity(WarrantySubmitResponse response, MusicShopEvent event, ShopSale sale) {
         var header = event.getHeader();
         return SaleWarranty.builder()
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .warrantyCode(response.getWarrantyCode())
                 .warrantName(response.getWarrantyName())
                 .warrantyStart(response.getStartDate())

@@ -12,7 +12,7 @@ public abstract class MusicShopEventProcessor<T extends ProcessorValidator> impl
 
     abstract T getValidator();
 
-    public void handleMessage(MusicShopEvent event) {
+    public void handleEvent(MusicShopEvent event) {
         try {
             getValidator().validateEvent(event);
             // Run business logic for implementing listener

@@ -14,7 +14,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 @Slf4j
 @AllArgsConstructor
 @ApplicationScoped
-public class KafkaMessageRouter {
+public class KafkaEventRouter {
 
     @Inject
     KafkaProcessorFactory kafkaProcessorFactoryImpl;
@@ -22,13 +22,13 @@ public class KafkaMessageRouter {
     ObjectMapper objectMapper;
 
     @Blocking
-    @Incoming("message-in")
+    @Incoming("event-in")
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public void consume(MusicShopEvent message) {
-        log.debug("Received kafka message: " + message.toString());
+    public void consume(MusicShopEvent event) {
+        log.info("Received kafka event with id: {} and type: {}", event.getHeader().getEventId(), event.getHeader().getEventType());
         kafkaProcessorFactoryImpl.getKafkaProcessors().forEach(listener -> {
-            if (listener.acceptsEventType(message.getHeader().getEventType()))
-                listener.handleMessage(message);
+            if (listener.acceptsEventType(event.getHeader().getEventType()))
+                listener.handleEvent(event);
         });
     }
 }

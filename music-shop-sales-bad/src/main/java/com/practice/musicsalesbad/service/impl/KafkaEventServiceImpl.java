@@ -65,7 +65,7 @@ public class KafkaEventServiceImpl implements KafkaEventService {
             return;
         }
 
-        if (sale.getSaleAmt() >= 0) {
+        if (sale.getSaleAmt() <= 0) {
             log.error("Sale amount must be greater than 0");
             return;
         }
@@ -74,6 +74,7 @@ public class KafkaEventServiceImpl implements KafkaEventService {
 
         try {
             shopTransactionRepositoryImpl.saveShopSale(musicSale);
+            log.info("Successfully submitted a sale");
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }
@@ -110,7 +111,7 @@ public class KafkaEventServiceImpl implements KafkaEventService {
             return;
         }
 
-        if (lesson.getSaleAmt() >= 0) {
+        if (lesson.getSaleAmt() <= 0) {
             log.error("Sale amount must be greater than 0");
             return;
         }
@@ -119,6 +120,7 @@ public class KafkaEventServiceImpl implements KafkaEventService {
 
         try {
             shopTransactionRepositoryImpl.saveShopLesson(lessonSale);
+            log.info("Successfully scheduled lesson");
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }
@@ -129,7 +131,6 @@ public class KafkaEventServiceImpl implements KafkaEventService {
     @Override
     public void handleReturnEvent(MusicShopEvent event) {
         var shopReturn = event.getReturns();
-        var findSale = true;
 
         if (shopReturn.getSaleId() == null) {
             log.error("Sale Id is required");
@@ -151,15 +152,15 @@ public class KafkaEventServiceImpl implements KafkaEventService {
             return;
         }
 
-        var returnFound = shopTransactionRepositoryImpl.getReturnBySaleId(shopReturn.getSaleId());
-        if (returnFound.isPresent()) {
-            log.error("A return with this sale id has already been recorded");
-            return;
-        }
-
         var shopSale = shopTransactionRepositoryImpl.getSaleBySaleId(shopReturn.getSaleId());
         if (shopSale.isEmpty()) {
             log.error("No sale record can be found for return");
+            return;
+        }
+
+        var returnFound = shopTransactionRepositoryImpl.getReturnBySaleId(shopReturn.getSaleId());
+        if (returnFound.isPresent()) {
+            log.error("A return with this sale id has already been recorded");
             return;
         }
 
@@ -175,6 +176,7 @@ public class KafkaEventServiceImpl implements KafkaEventService {
 
         try {
             shopTransactionRepositoryImpl.saveShopReturn(returned);
+            log.info("Successfully returned sale");
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }
@@ -200,13 +202,12 @@ public class KafkaEventServiceImpl implements KafkaEventService {
             return;
         }
 
-        var returnFound = shopTransactionRepositoryImpl.getReturnBySaleId(cancel.getLessonId());
-        if (returnFound.isPresent()) {
-            log.error("A cancellation with this lesson id has already been recorded");
+        var shopLesson = shopTransactionRepositoryImpl.getLessonByLessonId(cancel.getLessonId());
+        if (!shopLesson.isPresent()) {
+            log.error("The lesson with id: {} could not be found to be canceled", cancel.getLessonId());
             return;
         }
 
-        var shopLesson = shopTransactionRepositoryImpl.getLessonByLessonId(cancel.getLessonId());
         if (LocalDateTime.now().isAfter(shopLesson.get().getLessonDate())) {
             log.error("Cancel date cannot be after lesson date");
         }
@@ -215,10 +216,17 @@ public class KafkaEventServiceImpl implements KafkaEventService {
             log.error("Refund amount cannot be more than the sale amount");
         }
 
-        var lessonSale = EventMapper.eventToLessonCancel(event, shopLesson.get());
+        var currentCancel = shopTransactionRepositoryImpl.getCancelByLessonId(cancel.getLessonId());
+        if (currentCancel.isPresent()) {
+            log.error("A cancellation with this lesson id has already been recorded");
+            return;
+        }
+
+        var lessonCancel = EventMapper.eventToLessonCancel(event, shopLesson.get());
 
         try {
-            shopTransactionRepositoryImpl.saveLessonCancel(lessonSale);
+            shopTransactionRepositoryImpl.saveLessonCancel(lessonCancel);
+            log.info("Successfully canceled lesson");
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }
@@ -244,28 +252,41 @@ public class KafkaEventServiceImpl implements KafkaEventService {
 
         try {
             var response = warrantyServiceRest.submitWarranty(request);
-            var warranty = WarrantyMapper.warrantyResponseToEntity(response.getEntity(), event);
-            warrantyRepositoryImpl.saveWarranty(warranty);
+            if (response.getStatus().getCode() != 200) {
+                log.error("Something went wrong: {}", response.getStatus().getMessage());
+            } else {
+                var warranty = WarrantyMapper.warrantyResponseToEntity(response.getData(), event, shopSale.get());
+                warrantyRepositoryImpl.saveWarranty(warranty);
+                log.info("Successfully activated warranty");
+            }
         } catch (WebApplicationException ex) {
             log.error("Could not submit warranty successfully", ex);
         } catch (Exception ex) {
             log.error("Something went wrong", ex);
         }
     }
-    
+
     public void handleRewardsEvent(MusicShopEvent event) {
-        if (StringUtil.isEmptyOrNull(event.getSale().getEmployeeName()) &&
-                StringUtil.isEmptyOrNull(event.getLesson().getTeacherName())) {
+        if (event.getSale() != null) {
+            if (StringUtil.isEmptyOrNull(event.getSale().getEmployeeName())) {
+                log.error("Employee Name or Teacher Name is required");
+            }
+        } else if (event.getLesson() != null) {
+            if (StringUtil.isEmptyOrNull(event.getLesson().getTeacherName())) {
+                log.error("Employee Name or Teacher Name is required");
+            }
+        } else {
             log.error("Employee Name or Teacher Name is required");
-            return;
         }
 
         var request = EventMapper.eventToRewardsRequest(event);
 
-        try (var resonse = rewardsServiceRest.submitRewards(request)) {
-            if (resonse.getStatus() != 200) {
-                log.error("Something went wrong: {}", resonse.getStatusInfo());
-            }
+        var response = rewardsServiceRest.submitRewards(request);
+        if (response.getStatus().getCode() != 200) {
+            log.error("Something went wrong: {}", response.getStatus().getMessage());
+            return;
         }
+
+        log.info("Successfully submitted rewards");
     }
 }

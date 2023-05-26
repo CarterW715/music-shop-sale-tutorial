@@ -2,18 +2,20 @@ package com.practice.musicsalesbad.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "lesson_cancel", schema = "good")
+@Table(name = "lesson_cancel", schema = "bad")
 public class LessonCancel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
