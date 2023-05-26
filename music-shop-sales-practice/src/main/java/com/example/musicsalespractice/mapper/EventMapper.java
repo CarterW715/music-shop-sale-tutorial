@@ -1,18 +1,22 @@
 package com.example.musicsalespractice.mapper;
 
-import com.example.musicsalespractice.kafka.model.MusicShopEvent;
-import com.example.musicsalespractice.repository.model.ShopLesson;
-import com.example.musicsalespractice.repository.model.ShopSale;
+import com.practice.musicsalesgood.kafka.model.MusicShopEvent;
+import com.practice.musicsalesgood.repository.model.LessonCancel;
+import com.practice.musicsalesgood.repository.model.ShopLesson;
+import com.practice.musicsalesgood.repository.model.ShopReturn;
+import com.practice.musicsalesgood.repository.model.ShopSale;
+import com.practice.musicsalesgood.service.rest.model.RewardsSubmitRequest;
+import com.practice.musicsalesgood.service.rest.model.WarrantySubmitRequest;
 
-public class MessageMapper {
+public class EventMapper {
 
-    public static ShopSale MessageToShopSale(MusicShopEvent message) {
-        var header = message.getHeader();
-        var shop = message.getShop();
-        var sale = message.getSale();
+    public static ShopSale eventToShopSale(MusicShopEvent event) {
+        var header = event.getHeader();
+        var shop = event.getShop();
+        var sale = event.getSale();
         return ShopSale.builder()
                 .saleId(sale.getSaleId())
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .shopId(shop.getShopId())
                 .customerName(sale.getCustomerName())
                 .employeeName(sale.getEmployeeName())
@@ -26,19 +30,20 @@ public class MessageMapper {
                 .promoCode(sale.getPromoCode())
                 .saleAmount(sale.getSaleAmt())
                 .saleDate(sale.getSaleDate())
+                .tax(sale.getTax())
                 .shopCountry(shop.getCountry())
                 .shopName(shop.getName())
                 .shopState(shop.getState())
                 .build();
     }
 
-    public static ShopLesson MessageToShopLesson(MusicShopEvent message) {
-        var header = message.getHeader();
-        var shop = message.getShop();
-        var lesson = message.getLesson();
+    public static ShopLesson eventToShopLesson(MusicShopEvent event) {
+        var header = event.getHeader();
+        var shop = event.getShop();
+        var lesson = event.getLesson();
         return ShopLesson.builder()
                 .lessonId(lesson.getLessonId())
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .shopId(shop.getShopId())
                 .customerName(lesson.getCustomerName())
                 .teacherName(lesson.getTeacherName())
@@ -46,8 +51,9 @@ public class MessageMapper {
                 .discountAmount(lesson.getDiscountAmt())
                 .grandTotal(lesson.getGrandTotal())
                 .instrument(lesson.getInstrument())
-                .version(header.getVersion())
+                .messageVersion(header.getVersion())
                 .promoCode(lesson.getPromoCode())
+                .tax(lesson.getTax())
                 .saleAmount(lesson.getSaleAmt())
                 .lessonDate(lesson.getLessonDate())
                 .shopCountry(shop.getCountry())
@@ -56,12 +62,12 @@ public class MessageMapper {
                 .build();
     }
 
-    public static ShopReturn MessageToSaleReturn(MusicShopEvent message, ShopSale sale) {
-        var header = message.getHeader();
-        var returns = message.getReturns();
+    public static ShopReturn eventToSaleReturn(MusicShopEvent event, ShopSale sale) {
+        var header = event.getHeader();
+        var returns = event.getReturns();
         return ShopReturn.builder()
                 .shopSale(sale)
-                .messageId(header.getMessageId())
+                .messageId(header.getEventId())
                 .version(header.getVersion())
                 .eventTimestamp(header.getEventTimestamp())
                 .refundAmount(returns.getRefundAmt())
@@ -69,8 +75,20 @@ public class MessageMapper {
                 .build();
     }
 
-    public static WarrantySubmitRequest MessageToWarrantyRequest(MusicShopEvent message) {
-        var sale = message.getSale();
+    public static LessonCancel eventToLessonCancel(MusicShopEvent event, ShopLesson lesson) {
+        var header = event.getHeader();
+        var cancel = event.getCancel();
+        return LessonCancel.builder()
+                .shopLesson(lesson)
+                .messageId(header.getEventId())
+                .version(header.getVersion())
+                .eventTimestamp(header.getEventTimestamp())
+                .refundAmount(cancel.getRefundAmt())
+                .build();
+    }
+
+    public static WarrantySubmitRequest eventToWarrantyRequest(MusicShopEvent event) {
+        var sale = event.getSale();
         return WarrantySubmitRequest.builder()
                 .saleId(sale.getSaleId())
                 .instrumentName(sale.getInstrument())
@@ -79,12 +97,12 @@ public class MessageMapper {
                 .build();
     }
 
-    public static RewardsSubmitRequest MessageToRewardsRequest(MusicShopEvent message) {
+    public static RewardsSubmitRequest eventToRewardsRequest(MusicShopEvent event) {
         var request = RewardsSubmitRequest.builder().build();
-        if (message.getSale() != null) {
-            request.setEmployeeName(message.getSale().getEmployeeName());
+        if (event.getSale() != null) {
+            request.setEmployeeName(event.getSale().getEmployeeName());
         } else {
-            request.setTeacherName(message.getLesson().getTeacherName());
+            request.setTeacherName(event.getLesson().getTeacherName());
         }
         return request;
     }

@@ -1,10 +1,15 @@
 package com.example.musicsalespractice.repository.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder(toBuilder = true)
 @NoArgsConstructor
@@ -16,10 +21,10 @@ public class ShopSale {
     @Column(name = "shop_sale_id")
     long id;
 
-    @Builder.Default
     @OneToOne(mappedBy = "shopSale", cascade = CascadeType.ALL)
-    ShopReturn shopReturn = ShopReturn.builder().build();
+    ShopReturn shopReturn;
 
+    @Column(name = "sale_id")
     UUID saleId;
 
     @Column(name = "inst_nm")
@@ -63,6 +68,7 @@ public class ShopSale {
     @Column(name = "msg_version")
     String messageVersion;
 
+    @Column(name = "shop_id")
     UUID shopId;
 
     @Column(name = "shop_ctry")

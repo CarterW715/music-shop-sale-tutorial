@@ -1,12 +1,12 @@
-package com.practice.musicsalesbad.service.rest.model;
+package com.example.musicsalespractice.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ExternalServiceWarrantyResponse {
-    WarrantySubmitResponse data;
+public class ExternalServiceResponse<T> {
+    T data;
     Status status;
 
     @Data

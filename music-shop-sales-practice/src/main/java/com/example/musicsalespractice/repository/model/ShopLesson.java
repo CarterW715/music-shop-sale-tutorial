@@ -1,12 +1,17 @@
 package com.example.musicsalespractice.repository.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "shop_lesson", schema = "good")
@@ -16,10 +21,10 @@ public class ShopLesson {
     @Column(name = "shop_lesson_id")
     long id;
 
-    @Builder.Default
     @OneToOne(mappedBy = "shopLesson", cascade = CascadeType.ALL)
-    LessonCancel lessonCancel = LessonCancel.builder().build();
+    LessonCancel lessonCancel;
 
+    @Column(name = "lesson_id")
     UUID lessonId;
 
     @Column(name = "inst_nm")
@@ -54,8 +59,10 @@ public class ShopLesson {
     @Column(name = "evnt_ts")
     LocalDateTime eventTimestamp;
 
-    String version;
+    @Column(name = "msg_version")
+    String messageVersion;
 
+    @Column(name = "shop_id")
     UUID shopId;
 
     @Column(name = "shop_ctry")

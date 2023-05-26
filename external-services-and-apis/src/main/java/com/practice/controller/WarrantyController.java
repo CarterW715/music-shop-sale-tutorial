@@ -27,7 +27,7 @@ public class WarrantyController {
     @POST
     @Path("/submit")
     @Produces(MediaType.APPLICATION_JSON)
-    public ExternalServiceResponse processWarrantySubmission(@NonNull WarrantySubmitRequest request) {
+    public ExternalServiceResponse<Warranty> processWarrantySubmission(@NonNull WarrantySubmitRequest request) {
         return ExternalServiceResponse.success(warrantyService.createWarranty(request));
     }
 

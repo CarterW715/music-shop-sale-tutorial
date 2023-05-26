@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ExternalServiceWarrantyResponse {
-    WarrantySubmitResponse data;
+public class ExternalServiceRewardsResponse {
+    RewardsSubmitResponse data;
     Status status;
 
     @Data

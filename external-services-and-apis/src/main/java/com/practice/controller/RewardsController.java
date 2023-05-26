@@ -27,7 +27,7 @@ public class RewardsController {
     @POST
     @Path("/submit")
     @Produces(MediaType.APPLICATION_JSON)
-    public ExternalServiceResponse processRewardsSubmission(@NonNull RewardsSubmitRequest request) {
+    public ExternalServiceResponse<RewardsResponse> processRewardsSubmission(@NonNull RewardsSubmitRequest request) {
         return ExternalServiceResponse.success(rewardsService.processRewards(request));
     }
 

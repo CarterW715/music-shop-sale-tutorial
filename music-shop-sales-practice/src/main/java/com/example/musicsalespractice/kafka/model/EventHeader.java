@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 public class EventHeader {
 
-    UUID messageId;
+    UUID eventId;
     String eventType;
     LocalDateTime eventTimestamp;
     String version;

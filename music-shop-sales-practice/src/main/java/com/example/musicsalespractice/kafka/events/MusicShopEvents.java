@@ -8,5 +8,6 @@ public enum MusicShopEvents {
     returned,
     cancelled,
     sold,
-    scheduled
+    scheduled,
+    error
 }

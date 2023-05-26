@@ -1,8 +1,7 @@
 package com.practice.musicsalesbad.service.rest;
 
-import com.practice.musicsalesbad.service.rest.model.ExternalServiceResponse;
+import com.practice.musicsalesbad.service.rest.model.ExternalServiceWarrantyResponse;
 import com.practice.musicsalesbad.service.rest.model.WarrantySubmitRequest;
-import com.practice.musicsalesbad.service.rest.model.WarrantySubmitResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -17,6 +16,6 @@ public interface WarrantyServiceRest {
     @Path("/external/warranty/submit")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ExternalServiceResponse<WarrantySubmitResponse> submitWarranty(WarrantySubmitRequest request);
+    ExternalServiceWarrantyResponse submitWarranty(WarrantySubmitRequest request);
 
 }

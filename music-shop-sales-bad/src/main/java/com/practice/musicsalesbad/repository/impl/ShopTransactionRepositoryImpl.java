@@ -6,7 +6,6 @@ import com.practice.musicsalesbad.repository.model.ShopLesson;
 import com.practice.musicsalesbad.repository.model.ShopReturn;
 import com.practice.musicsalesbad.repository.model.ShopSale;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
