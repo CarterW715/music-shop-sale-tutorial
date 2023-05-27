@@ -7,6 +7,7 @@ quarkus:
       topic-partitions:
         music_sales_stream_local_good: 1
         music_sales_stream_local_bad: 1
+        music_sales_stream_local_practice: 1
 
 kafka:
   bootstrap:
@@ -29,5 +30,10 @@ mp:
       event-out-bad:
         connector: smallrye-kafka
         topic: music_sales_stream_local_bad
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+      event-out-practice:
+        connector: smallrye-kafka
+        topic: music_sales_stream_local_practice
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer

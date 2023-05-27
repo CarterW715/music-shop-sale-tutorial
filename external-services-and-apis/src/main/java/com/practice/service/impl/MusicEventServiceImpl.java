@@ -27,7 +27,7 @@ public class MusicEventServiceImpl implements MusicEventService {
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
-                                .messageId(UUID.randomUUID())
+                                .eventId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
                                 .eventType(MusicShopEvents.sale.name())
@@ -71,7 +71,7 @@ public class MusicEventServiceImpl implements MusicEventService {
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
-                                .messageId(UUID.randomUUID())
+                                .eventId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
                                 .eventType(MusicShopEvents.lesson.name())
@@ -107,7 +107,7 @@ public class MusicEventServiceImpl implements MusicEventService {
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
-                                .messageId(UUID.randomUUID())
+                                .eventId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
                                 .eventType(MusicShopEvents.returns.name())
@@ -128,7 +128,7 @@ public class MusicEventServiceImpl implements MusicEventService {
         return MusicShopEvent.builder()
                 .header(
                         EventHeader.builder()
-                                .messageId(UUID.randomUUID())
+                                .eventId(UUID.randomUUID())
                                 .eventTimestamp(LocalDateTime.now())
                                 .version("1.0")
                                 .eventType(MusicShopEvents.cancel.name())

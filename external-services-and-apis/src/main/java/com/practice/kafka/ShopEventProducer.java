@@ -16,30 +16,26 @@ import java.util.UUID;
 public class ShopEventProducer {
 
     @Inject
-    @Channel("message-out-good")
+    @Channel("event-out-good")
     Emitter<MusicShopEvent> messageEmitterGood;
 
     @Inject
-    @Channel("message-out-bad")
+    @Channel("event-out-bad")
     Emitter<MusicShopEvent> messageEmitterBad;
 
     @Inject
-    @Channel("message-out-practice")
+    @Channel("event-out-practice")
     Emitter<MusicShopEvent> messageEmitterPractice;
 
     @Inject
     MusicEventService musicEventServiceImpl;
 
     private Emitter<MusicShopEvent> getMessageEmitter(ProjectType projectType) {
-        switch (projectType) {
-            default:
-            case GOOD:
-                return messageEmitterGood;
-            case BAD:
-                return messageEmitterBad;
-            case PRACTICE:
-                return messageEmitterPractice;
-        }
+        return switch (projectType) {
+            default -> messageEmitterGood;
+            case BAD -> messageEmitterBad;
+            case PRACTICE -> messageEmitterPractice;
+        };
     }
 
     public MusicShopEvent publishMusicShopSaleEvent(ProjectType projectType) {
