@@ -1,4 +1,10 @@
-# musicshopsales
+# Music Shop Sale Tutorial
+
+<br>
+
+## For an overview and instructions on completing this tutorial, please check out the documentation under the 'docs' folder
+
+<br>
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
